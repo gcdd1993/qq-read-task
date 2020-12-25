@@ -54,9 +54,6 @@ public class QqReadTaskExecutor {
         }
         this.jPush = new WxServerPushImpl("sc.ftqq.com", pushKey);
         log.info("Server酱推送初始化成功");
-
-        //
-        this.dailyNotify();
     }
 
     @Scheduled(cron = "${qqread.cron.daily-task}")

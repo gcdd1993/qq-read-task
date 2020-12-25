@@ -1,3 +1,16 @@
+plugins {
+    id 'application'
+    id 'com.palantir.docker' version '0.25.0' apply false
+}
+apply plugin: 'application'
+apply plugin: 'com.palantir.docker'
+
+apply from: "${rootDir}/gradle/docker.gradle"
+
+application {
+    mainClassName = 'io.github.gcdd1993.qqread.QqReadApplication'
+}
+
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 

@@ -1,0 +1,41 @@
+//plugins {
+//    id 'application'
+//    id 'com.palantir.docker' version '0.25.0' apply false
+//}
+//apply plugin: 'application'
+//apply plugin: 'com.palantir.docker'
+
+def dockerRepository = 'registry.cn-zhangjiakou.aliyuncs.com/halmawork'
+afterEvaluate { project ->
+    print("$buildDir/docker/${project.name}")
+    if (pluginManager.hasPlugin("application")) {
+        task info { task ->
+            doLast {
+                println "${project.name}-${project.version}"
+            }
+        }
+
+        task archiveDeps(type: Tar) { task ->
+            def deps = task.project.configurations.runtimeClasspath.fileCollection { true }
+            from deps.sort()
+            archiveFileName = "dep-libs.tar"
+            destinationDirectory = file("$buildDir/docker")
+        }
+
+        task prepare(type: Copy) { task ->
+            dependsOn(jar, archiveDeps, startScripts)
+            from "$buildDir/scripts/", jar.outputs, "${rootDir}/gradle/Dockerfile"
+            into "$buildDir/docker/"
+        }
+
+        docker {
+            name "${dockerRepository}/${project.name}:${project.version}"
+            dockerfile file("$buildDir/docker/Dockerfile")
+            buildArgs([MODULE: "${project.name}"])
+        }
+
+        dockerPrepare {
+            dependsOn(prepare)
+        }
+    }
+}

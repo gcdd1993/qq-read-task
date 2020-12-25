@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -38,6 +40,8 @@ public class QqReadTaskExecutor {
 
     private final List<QqReadTask> taskList = new LinkedList<>();
 
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
+
     @PostConstruct
     void init() {
         log.info("配置了{}个账号", configs.length);
@@ -58,27 +62,27 @@ public class QqReadTaskExecutor {
 
     @Scheduled(cron = "${qqread.cron.daily-task}")
     void dailyTask() {
-        taskList.forEach(QqReadTask::dailyTask);
+        taskList.forEach(it -> executorService.submit(it::dailyTask));
     }
 
     @Scheduled(cron = "${qqread.cron.cycle-task}")
     void cycleTask() {
-        taskList.forEach(QqReadTask::cycleTask);
+        taskList.forEach(it -> executorService.submit(it::cycleTask));
     }
 
     @Scheduled(cron = "${qqread.cron.add-read-time}")
     void addReadTime() {
-        taskList.forEach(QqReadTask::addReadTime);
+        taskList.forEach(it -> executorService.submit(it::addReadTime));
     }
 
     @Scheduled(cron = "${qqread.cron.open-box}")
     void openBox() {
-        taskList.forEach(QqReadTask::openBox);
+        taskList.forEach(it -> executorService.submit(it::openBox));
     }
 
     @Scheduled(cron = "${qqread.cron.withdraw}")
     void withdraw() {
-        taskList.forEach(QqReadTask::withdraw);
+        taskList.forEach(it -> executorService.submit(it::withdraw));
     }
 
     @Scheduled(cron = "${qqread.cron.notify}")

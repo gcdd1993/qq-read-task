@@ -13,8 +13,6 @@ import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Optional;
-import java.util.Random;
-import java.util.regex.Pattern;
 
 /**
  * @author gcdd1993
@@ -29,10 +27,6 @@ public class QqReadTask {
     private final OkHttpClient.Builder clientBuilder;
     private final Request.Builder requestBuilder;
     private final QqReadConfig qqReadConfig;
-    private String nickname;
-    private int[] readTimes = {60, 180, 360, 600, 900, 1200, 1500};
-    private final Random random = new Random();
-    private final Pattern readTimePattern = Pattern.compile("readTime=(.*?)&read_");
 
     public QqReadTask(QqReadConfig config) {
         this.qqReadConfig = config;
@@ -50,7 +44,6 @@ public class QqReadTask {
                 .addHeader("Accept-Language", "zh-cn")
 //                .addHeader("Accept-Encoding", "gzip, deflate, br")
                 .addHeader("mpversion", "0.30.0");
-        ;
     }
 
     /**
@@ -60,9 +53,7 @@ public class QqReadTask {
         track();
         // 阅豆签到
         _getDailyBeans()
-                .ifPresent(__ -> {
-                    log.info("【阅豆签到】获得{}阅豆", __.getInteger("takeTicket"));
-                });
+                .ifPresent(__ -> log.info("【阅豆签到】获得{}阅豆", __.getInteger("takeTicket")));
         // 今日打卡
         _getDailyTasks()
                 .ifPresent(tasks -> {
@@ -138,6 +129,8 @@ public class QqReadTask {
 
     /**
      * 开宝箱领金币
+     * <p>
+     * 启动程序时，运行一次，然后根据宝箱时间，确认下次运行时间
      */
     public void openBox() {
         track();
@@ -164,7 +157,8 @@ public class QqReadTask {
                             log.warn("【开启宝箱失败】");
                         }
                     } else {
-                        log.info("【开启宝箱失败】未到开启宝箱时间，下一个宝箱{}", tasks.getJSONObject("treasureBox").getString("tipText"));
+                        var tip = tasks.getJSONObject("treasureBox").getString("tipText");
+                        log.info("【开启宝箱失败】未到开启宝箱时间，下一个宝箱{}", tip);
                     }
                 });
     }
@@ -478,7 +472,7 @@ public class QqReadTask {
      */
     private Optional<JSONObject> _track() {
         // 替换dis 时间戳
-        var requestBody = RequestBody.Companion.create(JSON.toJSONString(qqReadConfig.getBody()), MEDIA_TYPE_JSON);
+        var requestBody = RequestBody.Companion.create(JSON.toJSONString(qqReadConfig.getTrackBody()), MEDIA_TYPE_JSON);
         var url = "https://mqqapi.reader.qq.com/log/v4/mqq/track";
         return _postData(url, requestBody);
     }
@@ -546,15 +540,16 @@ public class QqReadTask {
                     return Optional.ofNullable(json.getJSONObject("data"));
                 } else {
                     log.warn("get data error, url --> {}, msg --> {}", request.url().toString(), json.getString("msg"));
+                    throw new QqReadCallException(MessageFormat.format("在解析数据时出现错误 code --> {0}, msg --> {1}", json.getInteger("code"), json.getString("msg")));
                 }
-                return Optional.empty();
             } else {
                 log.error("get data error, url --> {}, code --> {}", request.url().toString(), res.code());
+                throw new QqReadCallException(MessageFormat.format("在获取数据时出现错误 code --> {0}", res.code()));
             }
         } catch (IOException e) {
             log.error("get data error, url --> {}", request.url().toString(), e);
+            throw new QqReadCallException(MessageFormat.format("在调用接口时出现错误 {0} ", request.url().toString()));
         }
-        return Optional.empty();
     }
 
     private void _sleep(int seconds) {

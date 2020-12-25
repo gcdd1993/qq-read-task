@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  qq-read-task:
+    image: 'registry.cn-zhangjiakou.aliyuncs.com/halmawork/qq-read-task:1.0.0-SNAPSHOT'
+    hostname: qqread
+    tty: true

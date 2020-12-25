@@ -1,6 +1,7 @@
 package io.github.gcdd1993.qqread.task;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import io.github.gcdd1993.qqread.util.Utils;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * @author gcdd1993
@@ -68,10 +70,13 @@ public class QqReadTask {
                                             dailySign.getInteger("todayAmount"),
                                             dailySign.getInteger("clockInDays")
                                     );
-                                    _watchDailySignAds()
-                                            .ifPresent(dailySignAds -> {
-                                                log.info("【打卡翻倍】获得{}金币", dailySignAds.getInteger("amount"));
-                                            });
+                                    var videoDoneFlag = dailySign.getInteger("videoDoneFlag");
+                                    if (videoDoneFlag == 0) {
+                                        _watchDailySignAds()
+                                                .ifPresent(dailySignAds -> {
+                                                    log.info("【打卡翻倍】获得{}金币", dailySignAds.getInteger("amount"));
+                                                });
+                                    }
                                 });
                     }
                 });
@@ -95,9 +100,8 @@ public class QqReadTask {
                     var readTime = weekReadTime.getInteger("readTime");
                     _getWeekReadTasks()
                             .ifPresent(weekReadTasks -> {
-                                var arr = weekReadTasks.getJSONArray("");
-                                for (int i = 0; i < arr.size(); i++) {
-                                    var a = arr.getJSONObject(i);
+                                for (int i = 0; i < weekReadTasks.size(); i++) {
+                                    var a = weekReadTasks.getJSONObject(i);
                                     var readTimeT = a.getInteger("readTime");
                                     var isPick = a.getBoolean("isPick");
                                     if (readTime >= readTimeT && !isPick) {
@@ -175,15 +179,19 @@ public class QqReadTask {
                 .ifPresent(tasks -> {
                     // 立即阅读《xxxx》
                     var enableFlag = tasks.getJSONArray("taskList").getJSONObject(0).getInteger("enableFlag");
-                    if (enableFlag == 0) {
+                    var doneFlag = tasks.getJSONArray("taskList").getJSONObject(0).getInteger("doneFlag");
+                    if (enableFlag == 0 && doneFlag == 0) {
                         _readNow()
                                 .ifPresent(readNowReward -> {
                                     log.info("【{}】获得{}金币", tasks.getJSONArray("taskList").getJSONObject(0).getString("title"), readNowReward.getInteger("amount"));
                                 });
+                    } else {
+                        log.warn("【{}】今日已完成，请不要重复操作", tasks.getJSONArray("taskList").getJSONObject(0).getString("title"));
                     }
                     // 阅读任务
                     enableFlag = tasks.getJSONArray("taskList").getJSONObject(1).getInteger("enableFlag");
-                    if (enableFlag == 0) {
+                    doneFlag = tasks.getJSONArray("taskList").getJSONObject(1).getInteger("doneFlag");
+                    if (enableFlag == 0 && doneFlag == 0) {
                         var config = tasks.getJSONArray("taskList").getJSONObject(1).getJSONArray("config");
                         for (int i = 0; i < config.size(); i++) {
                             var c = config.getJSONObject(i);
@@ -197,10 +205,13 @@ public class QqReadTask {
                                         });
                             }
                         }
+                    } else {
+                        log.warn("【阅读任务】今日已完成，请不要重复操作");
                     }
                     // 看视频领金币
                     enableFlag = tasks.getJSONArray("taskList").getJSONObject(3).getInteger("enableFlag");
-                    if (enableFlag == 0) {
+                    doneFlag = tasks.getJSONArray("taskList").getJSONObject(3).getInteger("doneFlag");
+                    if (enableFlag == 0 && doneFlag == 0) {
                         var subTitle = tasks.getJSONArray("taskList").getJSONObject(3).getString("subTitle");
                         var count = subTitle
                                 .replace("(", "")
@@ -216,6 +227,8 @@ public class QqReadTask {
                         } else {
                             log.info("【视频奖励】今日任务已完成");
                         }
+                    } else {
+                        log.warn("【视频奖励】今日已完成，请不要重复操作");
                     }
                 });
     }
@@ -424,8 +437,8 @@ public class QqReadTask {
     /**
      * 周阅读奖励查询
      */
-    private Optional<JSONObject> _getWeekReadTasks() {
-        return _getData("https://mqqapi.reader.qq.com/mqq/pickPackageInit");
+    private Optional<JSONArray> _getWeekReadTasks() {
+        return _getDataArr("https://mqqapi.reader.qq.com/mqq/pickPackageInit");
     }
 
     /**
@@ -483,12 +496,20 @@ public class QqReadTask {
         return _getData(url);
     }
 
+    private Optional<JSONArray> _getDataArr(String url) {
+        var req = requestBuilder
+                .url(url)
+                .method("GET", null)
+                .build();
+        return _execute(req, new JsonArrayDataFunc());
+    }
+
     private Optional<JSONObject> _getData(String url) {
         var req = requestBuilder
                 .url(url)
                 .method("GET", null)
                 .build();
-        return _execute(req);
+        return _execute(req, new JsonObjectDataFunc());
     }
 
     private Optional<JSONObject> _postData(String url) {
@@ -496,7 +517,7 @@ public class QqReadTask {
                 .url(url)
                 .method("POST", RequestBody.Companion.create(new byte[0], null))
                 .build();
-        return _execute(req);
+        return _execute(req, new JsonObjectDataFunc());
     }
 
     private Optional<JSONObject> _postData(String url, RequestBody body) {
@@ -504,10 +525,10 @@ public class QqReadTask {
                 .url(url)
                 .method("POST", body)
                 .build();
-        return _execute(req);
+        return _execute(req, new JsonObjectDataFunc());
     }
 
-    private Optional<JSONObject> _execute(Request request) {
+    private <T> Optional<T> _execute(Request request, Function<JSONObject, T> dataFunc) {
         try {
             var res = this.clientBuilder
                     .build()
@@ -517,14 +538,24 @@ public class QqReadTask {
                 var json = JSON.parseObject(res.body().string());
                 log.debug(json.toJSONString());
                 if (json.getInteger("code") == 0) {
-                    return Optional.ofNullable(json.getJSONObject("data"));
+//                    return Optional.ofNullable(json.getJSONObject("data"));
+                    return Optional.ofNullable(dataFunc.apply(json));
                 } else {
                     log.warn("get data error, url --> {}, msg --> {}", request.url().toString(), json.getString("msg"));
-                    throw new QqReadCallException(MessageFormat.format("在解析数据时出现错误 code --> {0}, msg --> {1}", json.getInteger("code"), json.getString("msg")));
+                    throw new QqReadCallException(MessageFormat.format(
+                            "在解析数据时出现错误 code --> {0}, msg --> {1}, url --> {2}",
+                            json.getInteger("code"),
+                            json.getString("msg"),
+                            request.url().toString()
+                    ));
                 }
             } else {
                 log.error("get data error, url --> {}, code --> {}", request.url().toString(), res.code());
-                throw new QqReadCallException(MessageFormat.format("在获取数据时出现错误 code --> {0}", res.code()));
+                throw new QqReadCallException(MessageFormat.format(
+                        "在获取数据时出现错误 code --> {0}, url --> {1}",
+                        res.code(),
+                        request.url().toString()
+                ));
             }
         } catch (IOException e) {
             log.error("get data error, url --> {}", request.url().toString(), e);
@@ -537,6 +568,24 @@ public class QqReadTask {
             Thread.sleep(seconds * 1000);
         } catch (InterruptedException e) {
             log.error("", e);
+        }
+    }
+
+    private static class JsonObjectDataFunc
+            implements Function<JSONObject, JSONObject> {
+
+        @Override
+        public JSONObject apply(JSONObject jsonObject) {
+            return jsonObject.getJSONObject("data");
+        }
+    }
+
+    private static class JsonArrayDataFunc
+            implements Function<JSONObject, JSONArray> {
+
+        @Override
+        public JSONArray apply(JSONObject jsonObject) {
+            return jsonObject.getJSONArray("data");
         }
     }
 

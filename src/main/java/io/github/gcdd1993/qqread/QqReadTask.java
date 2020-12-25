@@ -47,98 +47,98 @@ public class QqReadTask {
     /**
      * 获取用户信息
      */
-    public Optional<JSONObject> getUserInfo() {
+    private Optional<JSONObject> _getUserInfo() {
         return _getData("https://mqqapi.reader.qq.com/mqq/user/init");
     }
 
     /**
      * 阅豆签到
      */
-    public Optional<JSONObject> getDailyBeans() {
+    private Optional<JSONObject> _getDailyBeans() {
         return _postData("https://mqqapi.reader.qq.com/mqq/sign_in/user");
     }
 
     /**
      * 获取今日任务列表
      */
-    public Optional<JSONObject> getDailyTasks() {
+    private Optional<JSONObject> _getDailyTasks() {
         return _getData("https://mqqapi.reader.qq.com/mqq/red_packet/user/page?fromGuid=");
     }
 
     /**
      * 今日阅读时长
      */
-    public Optional<JSONObject> getDailyReadTime() {
+    private Optional<JSONObject> _getDailyReadTime() {
         return _getData("https://mqqapi.reader.qq.com/mqq/page/config?router=%2Fpages%2Fbook-read%2Findex&options=");
     }
 
     /**
      * 阅读奖励，好像一个号只能领一次
      */
-    public Optional<JSONObject> getDailyReadTime(int seconds) {
+    private Optional<JSONObject> _getDailyReadTime(int seconds) {
         return _getData("https://mqqapi.reader.qq.com/mqq/red_packet/user/read_time_reward?seconds=" + seconds);
     }
 
     /**
      * 周阅读时长
      */
-    public Optional<JSONObject> getWeekReadTime() {
+    private Optional<JSONObject> _getWeekReadTime() {
         return _getData("https://mqqapi.reader.qq.com/mqq/v1/bookShelfInit");
     }
 
     /**
      * 立即阅读
      */
-    public Optional<JSONObject> readWow() {
+    private Optional<JSONObject> _readWow() {
         return _getData("https://mqqapi.reader.qq.com/mqq/red_packet/user/read_book");
     }
 
     /**
      * 今日阅读时长
      */
-    public Optional<JSONObject> readTasks(int seconds) {
+    private Optional<JSONObject> _readTasks(int seconds) {
         return _getData("https://mqqapi.reader.qq.com/mqq/red_packet/user/read_time?seconds=" + seconds);
     }
 
     /**
      * 今日阅读时长
      */
-    public Optional<JSONObject> dailySign() {
+    private Optional<JSONObject> _dailySign() {
         return _getData("https://mqqapi.reader.qq.com/mqq/red_packet/user/clock_in/page");
     }
 
     /**
      * 今日打卡看广告翻倍
      */
-    public Optional<JSONObject> watchDailySignAds() {
+    private Optional<JSONObject> _watchDailySignAds() {
         return _getData("https://mqqapi.reader.qq.com/mqq/red_packet/user/clock_in_video");
     }
 
     /**
      * 看视频，拿金币
      */
-    public Optional<JSONObject> watchVideo() {
+    private Optional<JSONObject> _watchVideo() {
         return _getData("https://mqqapi.reader.qq.com/mqq/red_packet/user/watch_video");
     }
 
     /**
      * 每20分钟开一次宝箱
      */
-    public Optional<JSONObject> treasureBox() {
+    private Optional<JSONObject> _treasureBox() {
         return _getData("https://mqqapi.reader.qq.com/mqq/red_packet/user/treasure_box");
     }
 
     /**
      * 看广告，宝箱奖励翻倍
      */
-    public Optional<JSONObject> treasureBoxAds() {
+    private Optional<JSONObject> _treasureBoxAds() {
         return _getData("https://mqqapi.reader.qq.com/mqq/red_packet/user/treasure_box_video");
     }
 
     /**
      * 周阅读奖励查询
      */
-    public Optional<JSONObject> getWeekReadTasks() {
+    private Optional<JSONObject> _getWeekReadTasks() {
         return _getData("https://mqqapi.reader.qq.com/mqq/pickPackageInit");
     }
 
@@ -147,7 +147,7 @@ public class QqReadTask {
      *
      * @param readTime 阅读时长
      */
-    public Optional<JSONObject> getWeekReadTasks(int readTime) {
+    private Optional<JSONObject> _getWeekReadTasks(int readTime) {
         return _getData("https://mqqapi.reader.qq.com/mqq/pickPackage?readTime=" + readTime);
     }
 
@@ -156,7 +156,7 @@ public class QqReadTask {
      *
      * @param uploadTime 阅读时长
      */
-    public Optional<JSONObject> readBooks(String bookUrl, int uploadTime) {
+    private Optional<JSONObject> _readBooks(String bookUrl, int uploadTime) {
         // fixme 设置上传时长
         var url = bookUrl;
         return _getData(url);
@@ -165,7 +165,7 @@ public class QqReadTask {
     /**
      * 数据追踪，解决1金币问题
      */
-    public Optional<JSONObject> track() {
+    private Optional<JSONObject> _track() {
         // fixme 设置上传时长
         var url = "https://mqqapi.reader.qq.com/log/v4/mqq/track";
         return _getData(url);
@@ -174,7 +174,7 @@ public class QqReadTask {
     /**
      * 今日金币统计
      */
-    public Optional<JSONObject> getRedPackets(String pn) {
+    private Optional<JSONObject> _getRedPackets(String pn) {
         var url = "https://mqqapi.reader.qq.com/mqq/red_packet/user/trans/list?pn=" + pn;
         return _getData(url);
     }
@@ -182,7 +182,7 @@ public class QqReadTask {
     /**
      * 提现
      */
-    public Optional<JSONObject> getWithdrawInfo(String pn) {
+    private Optional<JSONObject> _getWithdrawInfo(String pn) {
         var url = "https://mqqapi.reader.qq.com/mqq/red_packet/user/withdraw/page";
         return _getData(url);
     }
@@ -190,13 +190,12 @@ public class QqReadTask {
     /**
      * 提现
      */
-    public Optional<JSONObject> withdrawToWallet(String amount) {
+    private Optional<JSONObject> _withdrawToWallet(String amount) {
         var url = "https://mqqapi.reader.qq.com/mqq/red_packet/user/withdraw?amount=" + amount;
         return _getData(url);
     }
 
     private Optional<JSONObject> _getData(String url) {
-//            var url = "https://mqqapi.reader.qq.com/mqq/user/init";
         var req = requestBuilder
                 .url(url)
                 .method("GET", null)

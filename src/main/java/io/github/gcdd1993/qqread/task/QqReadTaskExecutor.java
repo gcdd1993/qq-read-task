@@ -1,5 +1,7 @@
-package io.github.gcdd1993.qqread;
+package io.github.gcdd1993.qqread.task;
 
+import io.github.gcdd1993.qqread.jpush.JPush;
+import io.github.gcdd1993.qqread.jpush.WxServerPushImpl;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,12 @@ public class QqReadTaskExecutor {
     @Setter
     private QqReadConfig[] configs;
 
+    @Getter
+    @Setter
+    private String pushKey;
+
+    private JPush jPush;
+
     private final List<QqReadTask> taskList = new LinkedList<>();
 
     @PostConstruct
@@ -43,6 +51,11 @@ public class QqReadTaskExecutor {
                 log.error("账号 {} 出现异常，请检查", config.getQq());
             }
         }
+        this.jPush = new WxServerPushImpl("sc.ftqq.com", pushKey);
+        log.info("Server酱推送初始化成功");
+
+        //
+        this.dailyNotify();
     }
 
     @Scheduled(cron = "${qqread.cron.daily-task}")
@@ -63,6 +76,25 @@ public class QqReadTaskExecutor {
     @Scheduled(cron = "${qqread.cron.open-box}")
     void openBox() {
         taskList.forEach(QqReadTask::openBox);
+    }
+
+    @Scheduled(cron = "${qqread.cron.withdraw}")
+    void withdraw() {
+        taskList.forEach(QqReadTask::withdraw);
+    }
+
+    @Scheduled(cron = "${qqread.cron.notify}")
+    void dailyNotify() {
+        taskList.forEach(task -> {
+            var msg = task.dailyNotify();
+            var msgs = msg.split("\n");
+            var pushRes = this.jPush.push(msgs[0] + "," + msgs[1], msg);
+            if (pushRes.isSuccess()) {
+                log.info("推送消息成功");
+            } else {
+                log.error("推送消息失败 {}", pushRes.getMsg());
+            }
+        });
     }
 
 }

@@ -1,4 +1,4 @@
-package io.github.gcdd1993.qqread;
+package io.github.gcdd1993.qqread.task;
 
 import lombok.NoArgsConstructor;
 import okhttp3.Cookie;

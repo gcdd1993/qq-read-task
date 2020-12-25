@@ -1,7 +1,8 @@
-package io.github.gcdd1993.qqread;
+package io.github.gcdd1993.qqread.task;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import io.github.gcdd1993.qqread.util.Utils;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -255,7 +256,7 @@ public class QqReadTask {
     /**
      * 每日通知，建议在11点半运行
      */
-    public void dailyNotify() {
+    public String dailyNotify() {
         var sb = new StringBuilder();
         _getUserInfo()
                 .ifPresent(it -> {
@@ -312,6 +313,7 @@ public class QqReadTask {
                 });
 
         log.info(sb.toString());
+        return sb.toString();
     }
 
     /**

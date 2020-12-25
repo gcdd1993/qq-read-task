@@ -1,5 +1,7 @@
 package io.github.gcdd1993.qqread;
 
+import io.github.gcdd1993.qqread.task.QqReadConfig;
+import io.github.gcdd1993.qqread.task.QqReadTask;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

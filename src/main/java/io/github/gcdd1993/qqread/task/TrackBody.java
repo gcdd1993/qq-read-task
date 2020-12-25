@@ -30,7 +30,7 @@ public class TrackBody {
         private int windowWidth = 393;
         private int windowHeight = 684;
         private String openid;
-        private int guid;
+        private String guid;
         private String session;
         private int scene;
         private Object source;

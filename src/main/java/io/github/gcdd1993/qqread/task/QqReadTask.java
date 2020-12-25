@@ -256,64 +256,42 @@ public class QqReadTask {
     /**
      * 每日通知，建议在11点半运行
      */
-    public String dailyNotify() {
-        var sb = new StringBuilder();
+    public NotifyInfo dailyNotify() {
+        var notifyInfo = new NotifyInfo();
+        notifyInfo.setQq(this.qqReadConfig.getQq());
         _getUserInfo()
                 .ifPresent(it -> {
-                    sb
-                            .append("【用户昵称】")
-                            .append(it.getJSONObject("user").getString("nickName"));
+                    notifyInfo.setNickName(it.getJSONObject("user").getString("nickName"));
                 });
         _getDailyTasks()
                 .ifPresent(it -> {
                     var amount = it.getJSONObject("user").getInteger("amount");
-                    sb
-                            .append("\n【金币余额】")
-                            .append(MessageFormat.format(
-                                    "剩余{0}金币，可提现{1}元",
-                                    amount,
-                                    amount / 10_000
-                            ))
-                            .append("\n【宝箱任务】")
-                            .append(MessageFormat.format(
-                                    "已开{0}个宝箱，下一个宝箱{1}",
-                                    it.getJSONObject("treasureBox").getInteger("count"),
-                                    it.getJSONObject("treasureBox").getString("tipText")
-                            ))
-                    ;
+                    notifyInfo.setBalance(amount);
+                    notifyInfo.setBalanceStr(amount / 10_000 + "元");
+
+                    notifyInfo.setBoxes(it.getJSONObject("treasureBox").getInteger("count"));
                 });
         var amount = totalAward(LocalDate.now());
-        sb
-                .append("\n【今日收益】")
-                .append(MessageFormat.format(
-                        "{0}金币，可提现{1}元",
-                        amount,
-                        amount / 10_000
-                ));
+        notifyInfo.setAmount(amount);
+        notifyInfo.setAmountStr(amount / 10_000 + "元");
 
         _getWeekReadTime()
                 .ifPresent(it -> {
-                    sb
-                            .append("\n【本周阅读】")
-                            .append(MessageFormat.format(
-                                    "{0}小时{1}分钟",
-                                    it.getInteger("readTime") / 60,
-                                    it.getInteger("readTime") % 60
-                            ));
+                    notifyInfo.setWeekRead(MessageFormat.format(
+                            "{0}小时{1}分钟",
+                            it.getInteger("readTime") / 60,
+                            it.getInteger("readTime") % 60
+                    ));
                 });
         _getDailyReadTime()
                 .ifPresent(it -> {
-                    sb
-                            .append("\n【今日阅读】")
-                            .append(MessageFormat.format(
-                                    "{0}小时{1}分钟",
-                                    it.getInteger("todayReadSeconds") / 3600,
-                                    it.getInteger("todayReadSeconds") / 60 % 60
-                            ));
+                    notifyInfo.setDayRead(MessageFormat.format(
+                            "{0}小时{1}分钟",
+                            it.getInteger("todayReadSeconds") / 3600,
+                            it.getInteger("todayReadSeconds") / 60 % 60
+                    ));
                 });
-
-        log.info(sb.toString());
-        return sb.toString();
+        return notifyInfo;
     }
 
     /**
@@ -537,7 +515,7 @@ public class QqReadTask {
                     .execute();
             if (res.isSuccessful() && res.body() != null) {
                 var json = JSON.parseObject(res.body().string());
-                log.info(json.toJSONString());
+                log.debug(json.toJSONString());
                 if (json.getInteger("code") == 0) {
                     return Optional.ofNullable(json.getJSONObject("data"));
                 } else {

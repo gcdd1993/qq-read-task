@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author gcdd1993
@@ -85,16 +86,20 @@ public class QqReadTaskExecutor {
 
     @Scheduled(cron = "${qqread.cron.notify}")
     void dailyNotify() {
-        taskList.forEach(task -> {
-            var msg = task.dailyNotify();
-            var msgs = msg.split("\n");
-            var pushRes = this.jPush.push(msgs[0] + "," + msgs[1], msg);
-            if (pushRes.isSuccess()) {
-                log.info("推送消息成功");
-            } else {
-                log.error("推送消息失败 {}", pushRes.getMsg());
-            }
-        });
+        var notifyInfoList = taskList.stream().map(QqReadTask::dailyNotify).collect(Collectors.toList());
+        // 统计余额
+        var amount = notifyInfoList
+                .stream()
+                .map(NotifyInfo::getAmount)
+                .reduce(0, Integer::sum);
+        jPush.push("今日总收益", amount / 10_000 + "元");
+        // 统计余额
+        var balance = notifyInfoList
+                .stream()
+                .map(NotifyInfo::getBalance)
+                .reduce(0, Integer::sum);
+        jPush.push("账户总金额", balance / 10_000 + "元");
+        jPush.push("账户详情", notifyInfoList.stream().map(Object::toString).collect(Collectors.joining("\n\n\n\n")));
     }
 
 }

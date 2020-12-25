@@ -18,7 +18,7 @@ public class QqReadConfig {
     private int maxDailyReadTime = 600;
 
     private String openid;
-    private int guid;
+    private String guid;
     private String session;
     private int scene;
     private Object source;

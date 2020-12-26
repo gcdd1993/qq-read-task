@@ -502,7 +502,7 @@ public class QqReadTask {
      */
     private Optional<JSONObject> _withdrawToWallet(int amount) {
         var url = "https://mqqapi.reader.qq.com/mqq/red_packet/user/withdraw?amount=" + amount;
-        return _getData(url);
+        return _postData(url);
     }
 
     private Optional<JSONArray> _getDataArr(String url) {

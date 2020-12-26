@@ -23,4 +23,11 @@ class QqReadTaskExecutorTest {
     void dailyNotify() {
         qqReadTaskExecutor.dailyNotify();
     }
+
+    @Test
+    void withdraw() {
+        qqReadTaskExecutor.withdraw();
+        for (; ; ) {
+        }
+    }
 }

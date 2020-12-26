@@ -3,6 +3,7 @@ package io.github.gcdd1993.qqread.task;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import io.github.gcdd1993.qqread.jpush.JPush;
 import io.github.gcdd1993.qqread.util.Utils;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
@@ -30,8 +31,10 @@ public class QqReadTask {
     private final OkHttpClient.Builder clientBuilder;
     private final Request.Builder requestBuilder;
     private final QqReadConfig qqReadConfig;
+    private final JPush jPush;
 
-    public QqReadTask(QqReadConfig config) {
+    public QqReadTask(JPush jPush, QqReadConfig config) {
+        this.jPush = jPush;
         this.qqReadConfig = config;
         this.clientBuilder = new OkHttpClient.Builder()
                 .cookieJar(new OverlayCookieJar(HOST, config.getCookie()));
@@ -66,9 +69,11 @@ public class QqReadTask {
                         _readNow()
                                 .ifPresent(readNowReward -> {
                                     log.info("【{}】获得{}金币", tasks.getJSONArray("taskList").getJSONObject(0).getString("title"), readNowReward.getInteger("amount"));
+                                    this.jPush.push(MessageFormat.format("账号[{0}]立即阅读完成", qqReadConfig.getQq()), readNowReward.toJSONString());
                                 });
                     } else {
                         log.warn("【{}】今日已完成，请不要重复操作", tasks.getJSONArray("taskList").getJSONObject(0).getString("title"));
+                        this.jPush.push(MessageFormat.format("账号[{0}]立即阅读重复完成", qqReadConfig.getQq()), tasks.toJSONString());
                     }
                     enableFlag = tasks.getJSONArray("taskList").getJSONObject(2).getInteger("enableFlag");
                     doneFlag = tasks.getJSONArray("taskList").getJSONObject(2).getInteger("doneFlag");

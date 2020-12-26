@@ -1,15 +1,4 @@
-spring:
-  application:
-    name: qq-read-task
 qqread:
-  push-key: 'SCU138193T2b2331d7d6b3da86610a44e6a49a4de65fe2bf9c86265'
-  cron:
-    daily-task: 0 0 8 * * ? # 每天上午8点运行一次
-    add-read-time: 0 4/10 * * * ? # 每10分钟运行一次
-    open-box: 0 0/2 * * * ?  # 每2分钟运行一次
-    cycle-task: 0 0 8-20 * * ? # 每天8~20点运行，每小时运行一次
-    withdraw: 0 0 0 * * ? # 每天凌晨0点运行一次
-    notify: 0 0 23 * * ? # 每天23点运行一次
   configs:
     - qq: 1398371419
       ywsession: btges9uft294gal7uljxtxvb34ub8qjq

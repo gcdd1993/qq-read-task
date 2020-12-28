@@ -1,12 +1,22 @@
 qqread:
   configs:
-    - qq: 2234694356
-      ywsession: u6uxndz4oqrr8jj45usdibiwsca9vvc6
-      cookie: 'ywguid=2234694356;ywkey=yw0ltmDFdFip;platform=android;channel=mqqmina;mpVersion=0.35.3;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=59FEEC58BAF2F2355A5B1F813459D15C'
-      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=pages%2Fbook-read%2Findex&bid=29560579&readTime=7800&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A7800%2C%22pay_status%22%3A0%7D%7D%5D&sp=-1
-      maxDailyReadTime: 631
-      openid: 59FEEC58BAF2F2355A5B1F813459D15C
-      guid: 2234694356
-      session: u6uxndz4oqrr8jj45usdibiwsca9vvc6
+    - qq: 2982053228
+      ywsession: dk12k44cuuy2nlomu8twjfeqkfltkpbf
+      cookie: 'ywguid=2982053228;ywkey=yws454EdwJjh;platform=android;channel=mqqmina;mpVersion=0.38.2;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=EF7FF4DF202E2923BFB0A4EF0B1EF88F'
+      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=27598876&readTime=3609&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A3609%2C%22pay_status%22%3A0%7D%7D%5D&sp=-1
+      maxDailyReadTime: 730
+      openid: EF7FF4DF202E2923BFB0A4EF0B1EF88F
+      guid: 2982053228
+      session: dk12k44cuuy2nlomu8twjfeqkfltkpbf
       scene: 2014
-      source: -1
+      source: wza0001wzb0002
+    - qq: 3300418356
+      ywsession: xa3xecgzqda5bu3mumnqi1kup8vhnmz3
+      cookie: 'ywguid=3300418356;ywkey=ywCp0htgiZOx;platform=android;channel=mqqmina;mpVersion=0.38.2;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=79B38FC6B3499BAB15615611E1A31772'
+      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=27598876&readTime=5556&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A5556%2C%22pay_status%22%3A0%7D%7D%5D&sp=-1
+      maxDailyReadTime: 766
+      openid: 79B38FC6B3499BAB15615611E1A31772
+      guid: 3300418356
+      session: xa3xecgzqda5bu3mumnqi1kup8vhnmz3
+      scene: 2014
+      source: wza0001wzb0002

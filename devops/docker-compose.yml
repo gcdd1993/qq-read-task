@@ -5,3 +5,7 @@ services:
     image: 'registry.cn-zhangjiakou.aliyuncs.com/halmawork/qq-read-task:1.0.0-SNAPSHOT'
     hostname: qqread
     tty: true
+    environment:
+      - JAVA_OPTS="-Dspring.config.locations=/app/config/application.yml"
+    volumes:
+      - "/data/qq_read/config/application.yml:/app/config/application.yml"

@@ -32,7 +32,8 @@ class QqReadTaskTest {
 
     @Test
     void cycleTask() {
-        var task = new QqReadTask(jPush, qqReadTaskExecutor.getConfigs()[0]);
-        task.cycleTask();
+        Arrays.stream(qqReadTaskExecutor.getConfigs())
+                .map(it -> new QqReadTask(jPush, it))
+                .forEach(QqReadTask::cycleTask);
     }
 }

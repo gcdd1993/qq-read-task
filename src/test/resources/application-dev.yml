@@ -1,22 +1,22 @@
 qqread:
   configs:
-    - qq: 2982053228
-      ywsession: dk12k44cuuy2nlomu8twjfeqkfltkpbf
-      cookie: 'ywguid=2982053228;ywkey=yws454EdwJjh;platform=android;channel=mqqmina;mpVersion=0.38.2;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=EF7FF4DF202E2923BFB0A4EF0B1EF88F'
-      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=27598876&readTime=3609&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A3609%2C%22pay_status%22%3A0%7D%7D%5D&sp=-1
-      maxDailyReadTime: 730
-      openid: EF7FF4DF202E2923BFB0A4EF0B1EF88F
-      guid: 2982053228
-      session: dk12k44cuuy2nlomu8twjfeqkfltkpbf
+    - qq: 2200648262
+      ywsession: 6l9pik4ebe9xqjdzl27hzwpwht2lqjc5
+      cookie: 'ywguid=2200648262;ywkey=ywJzgPWtX6sf;platform=android;channel=mqqmina;mpVersion=0.41.0;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=E52BEE25C3E4A1F239B5507CABF20067'
+      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=29664125&readTime=3227&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A3227%2C%22pay_status%22%3A0%7D%7D%5D&sp=-1
+      maxDailyReadTime: 649
+      openid: E52BEE25C3E4A1F239B5507CABF20067
+      guid: 2200648262
+      session: 6l9pik4ebe9xqjdzl27hzwpwht2lqjc5
       scene: 2014
-      source: wza0001wzb0002
-    - qq: 3300418356
-      ywsession: xa3xecgzqda5bu3mumnqi1kup8vhnmz3
-      cookie: 'ywguid=3300418356;ywkey=ywCp0htgiZOx;platform=android;channel=mqqmina;mpVersion=0.38.2;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=79B38FC6B3499BAB15615611E1A31772'
-      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=27598876&readTime=5556&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A5556%2C%22pay_status%22%3A0%7D%7D%5D&sp=-1
-      maxDailyReadTime: 766
-      openid: 79B38FC6B3499BAB15615611E1A31772
-      guid: 3300418356
-      session: xa3xecgzqda5bu3mumnqi1kup8vhnmz3
+      source: -1
+    - qq: 2497228195
+      ywsession: zawdl0k3jyd33szu64111oxrqel0n84g
+      cookie: 'ywguid=2497228195;ywkey=ywmHCWQ6uCU4;platform=android;channel=mqqmina;mpVersion=0.41.0;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=CD7256BDBD5D3E2540B231E396AD8694'
+      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=29664125&readTime=5163&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A5163%2C%22pay_status%22%3A0%7D%7D%5D&sp=-1
+      maxDailyReadTime: 721
+      openid: CD7256BDBD5D3E2540B231E396AD8694
+      guid: 2497228195
+      session: zawdl0k3jyd33szu64111oxrqel0n84g
       scene: 2014
-      source: wza0001wzb0002
+      source: -1

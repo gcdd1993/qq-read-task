@@ -73,7 +73,7 @@ public class QqReadTask {
                                 });
                     } else {
                         _w("【{}】今日已完成，请不要重复操作", tasks.getJSONArray("taskList").getJSONObject(0).getString("title"));
-                        this.jPush.push(MessageFormat.format("账号[{0}]立即阅读重复完成", qqReadConfig.getQq()), tasks.toJSONString());
+//                        this.jPush.push(MessageFormat.format("账号[{0}]立即阅读重复完成", qqReadConfig.getQq()), tasks.toJSONString());
                     }
                     enableFlag = tasks.getJSONArray("taskList").getJSONObject(2).getInteger("enableFlag");
                     doneFlag = tasks.getJSONArray("taskList").getJSONObject(2).getInteger("doneFlag");

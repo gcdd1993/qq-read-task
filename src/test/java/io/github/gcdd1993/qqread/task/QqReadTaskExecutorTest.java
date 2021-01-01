@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * @author gcdd1993
  * @date 2020/12/26
@@ -27,6 +25,20 @@ class QqReadTaskExecutorTest {
     @Test
     void withdraw() {
         qqReadTaskExecutor.withdraw();
+        for (; ; ) {
+        }
+    }
+
+    @Test
+    void dailyTask() {
+        qqReadTaskExecutor.dailyTask();
+        for (; ; ) {
+        }
+    }
+
+    @Test
+    void openBox() {
+        qqReadTaskExecutor.openBox();
         for (; ; ) {
         }
     }

@@ -68,11 +68,11 @@ public class QqReadTask {
                     if (enableFlag == 1 && doneFlag == 0) {
                         _readNow()
                                 .ifPresent(readNowReward -> {
-                                    log.info("【{}】获得{}金币", tasks.getJSONArray("taskList").getJSONObject(0).getString("title"), readNowReward.getInteger("amount"));
+                                    _i("【{}】获得{}金币", tasks.getJSONArray("taskList").getJSONObject(0).getString("title"), readNowReward.getInteger("amount"));
                                     this.jPush.push(MessageFormat.format("账号[{0}]立即阅读完成", qqReadConfig.getQq()), readNowReward.toJSONString());
                                 });
                     } else {
-                        log.warn("【{}】今日已完成，请不要重复操作", tasks.getJSONArray("taskList").getJSONObject(0).getString("title"));
+                        _w("【{}】今日已完成，请不要重复操作", tasks.getJSONArray("taskList").getJSONObject(0).getString("title"));
                         this.jPush.push(MessageFormat.format("账号[{0}]立即阅读重复完成", qqReadConfig.getQq()), tasks.toJSONString());
                     }
                     enableFlag = tasks.getJSONArray("taskList").getJSONObject(2).getInteger("enableFlag");
@@ -80,7 +80,7 @@ public class QqReadTask {
                     if (enableFlag == 1 && doneFlag == 0) {
                         _dailySign()
                                 .ifPresent(dailySign -> {
-                                    log.info(
+                                    _i(
                                             "【{}】获得{}金币，已连续签到{}天",
                                             tasks.getJSONArray("taskList").getJSONObject(2).getString("title"),
                                             dailySign.getInteger("todayAmount"),
@@ -90,7 +90,7 @@ public class QqReadTask {
                                     if (videoDoneFlag == 0) {
                                         _watchDailySignAds()
                                                 .ifPresent(dailySignAds -> {
-                                                    log.info("【打卡翻倍】获得{}金币", dailySignAds.getInteger("amount"));
+                                                    _i("【打卡翻倍】获得{}金币", dailySignAds.getInteger("amount"));
                                                 });
                                     }
                                 });
@@ -109,14 +109,14 @@ public class QqReadTask {
                                     if (readTime >= readTimeT && !isPick) {
                                         // 领取周时长奖励
                                         _getWeekReadReward(readTimeT);
-                                        log.info("【周时长奖励】领取{}时长奖励成功", readTimeT);
+                                        _i("【周时长奖励】领取{}时长奖励成功", readTimeT);
                                     }
                                 }
                             });
                 });
         // 阅豆签到
         _getDailyBeans()
-                .ifPresent(__ -> log.info("【阅豆签到】获得{}阅豆", __.getInteger("takeTicket")));
+                .ifPresent(__ -> _i("【阅豆签到】获得{}阅豆", __.getInteger("takeTicket")));
     }
 
     /**
@@ -128,11 +128,11 @@ public class QqReadTask {
                 .ifPresent(dailyReadTime -> {
                     var time = dailyReadTime.getInteger("todayReadSeconds") / 60;
                     if (time >= qqReadConfig.getMaxDailyReadTime()) {
-                        log.info("【阅读时长】今日阅读时长{}已达到设置的最大阅读时长{}，故不增加阅读时长", time, qqReadConfig.getMaxDailyReadTime());
+                        _i("【阅读时长】今日阅读时长{}已达到设置的最大阅读时长{}，故不增加阅读时长", time, qqReadConfig.getMaxDailyReadTime());
                     } else {
                         var uploadTime = Utils.randomInt(5 * 1000 * 60, 6 * 1000 * 60); //5分钟到6分钟之间
                         _readBooks(qqReadConfig.getBookUrl(), uploadTime);
-                        log.info("【阅读时长】成功增加{}分钟阅读时长", uploadTime / 60000);
+                        _i("【阅读时长】成功增加{}分钟阅读时长", uploadTime / 60000);
                     }
                 });
     }
@@ -150,25 +150,25 @@ public class QqReadTask {
                     if (doneFlag == 0) {
                         var box = _treasureBox();
                         if (box.isPresent()) {
-                            log.info("【开启第{}个宝箱】获得{}金币", box.get().getInteger("count"), box.get().getInteger("amount"));
+                            _i("【开启第{}个宝箱】获得{}金币", box.get().getInteger("count"), box.get().getInteger("amount"));
                             _getDailyTasks()
                                     .ifPresent(tasks1 -> {
                                         var videoDoneFlag = tasks1.getJSONObject("treasureBox").getInteger("videoDoneFlag");
                                         if (videoDoneFlag == 0) {
                                             _treasureBoxAds()
                                                     .ifPresent(boxAds -> {
-                                                        log.info("【宝箱奖励翻倍】获得{}金币", boxAds.getInteger("amount"));
+                                                        _i("【宝箱奖励翻倍】获得{}金币", boxAds.getInteger("amount"));
                                                     });
                                         } else {
-                                            log.warn("【宝箱奖励翻倍】未到时间");
+                                            _w("【宝箱奖励翻倍】未到时间");
                                         }
                                     });
                         } else {
-                            log.warn("【开启宝箱失败】");
+                            _w("【开启宝箱失败】");
                         }
                     } else {
                         var tip = tasks.getJSONObject("treasureBox").getString("tipText");
-                        log.info("【开启宝箱失败】未到开启宝箱时间，下一个宝箱{}", tip);
+                        _i("【开启宝箱失败】未到开启宝箱时间，下一个宝箱{}", tip);
                     }
                 });
     }
@@ -195,12 +195,12 @@ public class QqReadTask {
                                 var s = c.getInteger("seconds");
                                 _readTasks(s)
                                         .ifPresent(readTaskReward -> {
-                                            log.info("【阅读任务】阅读{}，获得{}金币", c.getString("timeStr"), readTaskReward.getInteger("amount"));
+                                            _i("【阅读任务】阅读{}，获得{}金币", c.getString("timeStr"), readTaskReward.getInteger("amount"));
                                         });
                             }
                         }
                     } else {
-                        log.warn("【阅读任务】今日已完成，请不要重复操作");
+                        _w("【阅读任务】今日已完成，请不要重复操作");
                     }
                     // 看视频领金币
                     enableFlag = tasks.getJSONArray("taskList").getJSONObject(3).getInteger("enableFlag");
@@ -216,13 +216,13 @@ public class QqReadTask {
                         if (finish < total) {
                             _watchVideo()
                                     .ifPresent(__ -> {
-                                        log.info("【视频奖励】获得{}金币({}/{})", __.getInteger("amount"), finish + 1, total);
+                                        _i("【视频奖励】获得{}金币({}/{})", __.getInteger("amount"), finish + 1, total);
                                     });
                         } else {
-                            log.info("【视频奖励】今日任务已完成");
+                            _i("【视频奖励】今日任务已完成");
                         }
                     } else {
-                        log.warn("【视频奖励】今日已完成，请不要重复操作");
+                        _w("【视频奖励】今日已完成，请不要重复操作");
                     }
                 });
         // 阅读奖励
@@ -236,7 +236,7 @@ public class QqReadTask {
                         if (enableFlag == 1 && doneFlag == 0) {
                             var seconds = readTimeTask.getInteger("seconds");
                             _readTimeRewardTasks(seconds)
-                                    .ifPresent(readTimeReward -> log.info("【阅读奖励】阅读{}秒，获得金币{}", seconds, readTimeReward.getInteger("amount")));
+                                    .ifPresent(readTimeReward -> _i("【阅读奖励】阅读{}秒，获得金币{}", seconds, readTimeReward.getInteger("amount")));
                         }
                     }
                 });
@@ -246,7 +246,7 @@ public class QqReadTask {
      * 数据跟踪
      */
     public void track() {
-        _track().ifPresent(__ -> log.info("数据追踪成功"));
+        _track().ifPresent(__ -> _i("数据追踪成功"));
     }
 
     /**
@@ -261,16 +261,16 @@ public class QqReadTask {
                     // 0.6元提现
                     if (configList.getJSONObject(0).getInteger("amount") == 6_000) {
                         _withdrawToWallet(6_000);
-                        log.info("【托管提现】提现0.6元成功");
+                        _i("【托管提现】提现0.6元成功");
                         amount -= 6_000;
                     }
                     // 满10就提现
                     if (amount >= 100_000) {
                         // 满10块钱了
                         _withdrawToWallet(100_000);
-                        log.info("【托管提现】提现10元成功");
+                        _i("【托管提现】提现10元成功");
                     } else {
-                        log.info("【托管提现】余额{}不足，无法提现", amount);
+                        _i("【托管提现】余额{}不足，无法提现", amount);
                     }
                 });
     }
@@ -545,13 +545,13 @@ public class QqReadTask {
                     .execute();
             if (res.isSuccessful() && res.body() != null) {
                 var json = JSON.parseObject(res.body().string());
-                log.debug(json.toJSONString());
+                _d(json.toJSONString());
                 _sleep(1);
                 if (json.getInteger("code") == 0) {
 //                    return Optional.ofNullable(json.getJSONObject("data"));
                     return Optional.ofNullable(dataFunc.apply(json));
                 } else {
-                    log.warn("get data error, url --> {}, msg --> {}", request.url().toString(), json.getString("msg"));
+                    _w("get data error, url --> {}, msg --> {}", request.url().toString(), json.getString("msg"));
                     throw new QqReadCallException(MessageFormat.format(
                             "在解析数据时出现错误 code --> {0}, msg --> {1}, url --> {2}",
                             json.getInteger("code"),
@@ -560,7 +560,7 @@ public class QqReadTask {
                     ));
                 }
             } else {
-                log.error("get data error, url --> {}, code --> {}", request.url().toString(), res.code());
+                _e("get data error, url --> {}, code --> {}", request.url().toString(), res.code());
                 throw new QqReadCallException(MessageFormat.format(
                         "在获取数据时出现错误 code --> {0}, url --> {1}",
                         res.code(),
@@ -568,7 +568,7 @@ public class QqReadTask {
                 ));
             }
         } catch (IOException e) {
-            log.error("get data error, url --> {}", request.url().toString(), e);
+            _e("get data error, url --> {}", request.url().toString(), e);
             throw new QqReadCallException(MessageFormat.format("在调用接口时出现错误 {0} ", request.url().toString()));
         }
     }
@@ -577,8 +577,41 @@ public class QqReadTask {
         try {
             Thread.sleep(seconds * 1000);
         } catch (InterruptedException e) {
-            log.error("", e);
+            _e("", e);
         }
+    }
+
+    private void _i(String format, Object... arguments) {
+        log.info("[{}] " + format, _mergeArgs(arguments));
+    }
+
+    private void _d(String format, Object... arguments) {
+        log.debug("[{}] " + format, _mergeArgs(arguments));
+    }
+
+    private void _w(String format, Object... arguments) {
+        log.warn("[{}] " + format, _mergeArgs(arguments));
+    }
+
+    private void _e(String format, Object... arguments) {
+        log.error("[{}] " + format, _mergeArgs(arguments));
+    }
+
+    /**
+     * 合并参数列表
+     *
+     * @param arguments 参数
+     * @return
+     */
+    private Object[] _mergeArgs(Object... arguments) {
+        var args = new Object[arguments.length + 1];
+        if (arguments.length > 0) {
+            System.arraycopy(arguments, 0, args, 1, arguments.length);
+            args[0] = this.qqReadConfig.getQq();
+        } else {
+            args = new Object[]{this.qqReadConfig.getQq()};
+        }
+        return args;
     }
 
     private static class JsonObjectDataFunc

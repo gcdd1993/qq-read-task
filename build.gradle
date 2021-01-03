@@ -19,7 +19,7 @@ if (!System.properties['java.version'].startsWith('11')) {
 }
 
 group 'io.github.gcdd1993'
-version '1.0.1-alpha2'
+version '1.0.1-alpha3'
 
 apply plugin: 'java'
 

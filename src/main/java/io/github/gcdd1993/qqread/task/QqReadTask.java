@@ -91,6 +91,7 @@ public class QqReadTask {
                                                         task.getString("title"),
                                                         dailySign.getInteger("amount")
                                                 );
+                                                _sleep(15);
                                                 var videoDoneFlag = dailySign.getInteger("videoDoneFlag");
                                                 if (videoDoneFlag == 0) {
                                                     _watchDailySignAds()
@@ -418,9 +419,7 @@ public class QqReadTask {
      * 今日打卡
      */
     private Optional<JSONObject> _dailySign() {
-        var res = _getData("https://mqqapi.reader.qq.com/mqq/red_packet/user/clock_in");
-        _sleep(15);
-        return res;
+        return _getData("https://mqqapi.reader.qq.com/mqq/red_packet/user/clock_in");
     }
 
     /**
@@ -428,7 +427,7 @@ public class QqReadTask {
      */
     private Optional<JSONObject> _watchDailySignAds() {
         var res = _getData("https://mqqapi.reader.qq.com/mqq/red_packet/user/clock_in_video");
-        _sleep(15);
+        _sleep(3);
         return res;
     }
 

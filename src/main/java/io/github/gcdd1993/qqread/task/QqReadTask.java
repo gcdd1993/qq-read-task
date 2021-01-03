@@ -63,38 +63,44 @@ public class QqReadTask {
         _getDailyTasks()
                 .ifPresent(tasks -> {
                     // 立即阅读《xxxx》
-                    var enableFlag = tasks.getJSONArray("taskList").getJSONObject(0).getInteger("enableFlag");
-                    var doneFlag = tasks.getJSONArray("taskList").getJSONObject(0).getInteger("doneFlag");
-                    if (enableFlag == 1 && doneFlag == 0) {
-                        _readNow()
-                                .ifPresent(readNowReward -> {
-                                    _i("【{}】获得{}金币", tasks.getJSONArray("taskList").getJSONObject(0).getString("title"), readNowReward.getInteger("amount"));
-                                    this.jPush.push(MessageFormat.format("账号[{0}]立即阅读完成", qqReadConfig.getQq()), readNowReward.toJSONString());
-                                });
-                    } else {
-                        _w("【{}】今日已完成，请不要重复操作", tasks.getJSONArray("taskList").getJSONObject(0).getString("title"));
+                    _findByTaskName("立即阅读", tasks.getJSONArray("taskList"))
+                            .ifPresent(task -> {
+                                var enableFlag = task.getInteger("enableFlag");
+                                var doneFlag = task.getInteger("doneFlag");
+                                if (enableFlag == 1 && doneFlag == 0) {
+                                    _readNow()
+                                            .ifPresent(readNowReward -> {
+                                                _i("【{}】获得{}金币", task.getString("title"), readNowReward.getInteger("amount"));
+                                                this.jPush.push(MessageFormat.format("账号[{0}]立即阅读完成", qqReadConfig.getQq()), readNowReward.toJSONString());
+                                            });
+                                } else {
+                                    _w("【{}】今日已完成，请不要重复操作", task.getString("title"));
 //                        this.jPush.push(MessageFormat.format("账号[{0}]立即阅读重复完成", qqReadConfig.getQq()), tasks.toJSONString());
-                    }
-                    enableFlag = tasks.getJSONArray("taskList").getJSONObject(2).getInteger("enableFlag");
-                    doneFlag = tasks.getJSONArray("taskList").getJSONObject(2).getInteger("doneFlag");
-                    if (enableFlag == 1 && doneFlag == 0) {
-                        _dailySign()
-                                .ifPresent(dailySign -> {
-                                    _i(
-                                            "【{}】获得{}金币，已连续签到{}天",
-                                            tasks.getJSONArray("taskList").getJSONObject(2).getString("title"),
-                                            dailySign.getInteger("todayAmount"),
-                                            dailySign.getInteger("clockInDays")
-                                    );
-                                    var videoDoneFlag = dailySign.getInteger("videoDoneFlag");
-                                    if (videoDoneFlag == 0) {
-                                        _watchDailySignAds()
-                                                .ifPresent(dailySignAds -> {
-                                                    _i("【打卡翻倍】获得{}金币", dailySignAds.getInteger("amount"));
-                                                });
-                                    }
-                                });
-                    }
+                                }
+                            });
+                    // 今日打卡
+                    _findByTaskName("今日打卡", tasks.getJSONArray("taskList"))
+                            .ifPresent(task -> {
+                                var enableFlag = task.getInteger("enableFlag");
+                                var doneFlag = task.getInteger("doneFlag");
+                                if (enableFlag == 1 && doneFlag == 0) {
+                                    _dailySign()
+                                            .ifPresent(dailySign -> {
+                                                _i(
+                                                        "【{}】获得{}金币",
+                                                        task.getString("title"),
+                                                        dailySign.getInteger("amount")
+                                                );
+                                                var videoDoneFlag = dailySign.getInteger("videoDoneFlag");
+                                                if (videoDoneFlag == 0) {
+                                                    _watchDailySignAds()
+                                                            .ifPresent(dailySignAds -> {
+                                                                _i("【打卡翻倍】获得{}金币", dailySignAds.getInteger("amount"));
+                                                            });
+                                                }
+                                            });
+                                }
+                            });
                 });
         // 周时长奖励
         _getWeekReadTime()
@@ -183,47 +189,53 @@ public class QqReadTask {
         _getDailyTasks()
                 .ifPresent(tasks -> {
                     // 阅读任务
-                    var enableFlag = tasks.getJSONArray("taskList").getJSONObject(1).getInteger("enableFlag");
-                    var doneFlag = tasks.getJSONArray("taskList").getJSONObject(1).getInteger("doneFlag");
-                    if (enableFlag == 1 && doneFlag == 0) {
-                        var config = tasks.getJSONArray("taskList").getJSONObject(1).getJSONArray("config");
-                        for (int i = 0; i < config.size(); i++) {
-                            var c = config.getJSONObject(i);
-                            var eFlag = c.getInteger("enableFlag");
-                            var dFlag = c.getInteger("doneFlag");
-                            if (eFlag == 1 && dFlag == 0) {
-                                var s = c.getInteger("seconds");
-                                _readTasks(s)
-                                        .ifPresent(readTaskReward -> {
-                                            _i("【阅读任务】阅读{}，获得{}金币", c.getString("timeStr"), readTaskReward.getInteger("amount"));
-                                        });
-                            }
-                        }
-                    } else {
-                        _w("【阅读任务】今日已完成，请不要重复操作");
-                    }
+                    _findByTaskName("阅读任务", tasks.getJSONArray("taskList"))
+                            .ifPresent(task -> {
+                                var enableFlag = task.getInteger("enableFlag");
+                                var doneFlag = task.getInteger("doneFlag");
+                                if (enableFlag == 1 && doneFlag == 0) {
+                                    var config = task.getJSONArray("config");
+                                    for (int i = 0; i < config.size(); i++) {
+                                        var c = config.getJSONObject(i);
+                                        var eFlag = c.getInteger("enableFlag");
+                                        var dFlag = c.getInteger("doneFlag");
+                                        if (eFlag == 1 && dFlag == 0) {
+                                            var s = c.getInteger("seconds");
+                                            _readTasks(s)
+                                                    .ifPresent(readTaskReward -> {
+                                                        _i("【阅读任务】阅读{}，获得{}金币", c.getString("timeStr"), readTaskReward.getInteger("amount"));
+                                                    });
+                                        }
+                                    }
+                                } else {
+                                    _w("【阅读任务】今日已完成，请不要重复操作");
+                                }
+                            });
                     // 看视频领金币
-                    enableFlag = tasks.getJSONArray("taskList").getJSONObject(3).getInteger("enableFlag");
-                    doneFlag = tasks.getJSONArray("taskList").getJSONObject(3).getInteger("doneFlag");
-                    if (enableFlag == 1 && doneFlag == 0) {
-                        var subTitle = tasks.getJSONArray("taskList").getJSONObject(3).getString("subTitle");
-                        var count = subTitle
-                                .replace("(", "")
-                                .replace(")", "")
-                                .split("/");
-                        var finish = Integer.parseInt(count[0]);
-                        var total = Integer.parseInt(count[1]);
-                        if (finish < total) {
-                            _watchVideo()
-                                    .ifPresent(__ -> {
-                                        _i("【视频奖励】获得{}金币({}/{})", __.getInteger("amount"), finish + 1, total);
-                                    });
-                        } else {
-                            _i("【视频奖励】今日任务已完成");
-                        }
-                    } else {
-                        _w("【视频奖励】今日已完成，请不要重复操作");
-                    }
+                    _findByTaskName("看视频领金币", tasks.getJSONArray("taskList"))
+                            .ifPresent(task -> {
+                                var enableFlag = task.getInteger("enableFlag");
+                                var doneFlag = task.getInteger("doneFlag");
+                                if (enableFlag == 1 && doneFlag == 0) {
+                                    var subTitle = task.getString("subTitle");
+                                    var count = subTitle
+                                            .replace("(", "")
+                                            .replace(")", "")
+                                            .split("/");
+                                    var finish = Integer.parseInt(count[0]);
+                                    var total = Integer.parseInt(count[1]);
+                                    if (finish < total) {
+                                        _watchVideo()
+                                                .ifPresent(__ -> {
+                                                    _i("【视频奖励】获得{}金币({}/{})", __.getInteger("amount"), finish + 1, total);
+                                                });
+                                    } else {
+                                        _i("【视频奖励】今日任务已完成");
+                                    }
+                                } else {
+                                    _w("【视频奖励】今日已完成，请不要重复操作");
+                                }
+                            });
                 });
         // 阅读奖励
         _getDailyReadTime()
@@ -406,7 +418,9 @@ public class QqReadTask {
      * 今日打卡
      */
     private Optional<JSONObject> _dailySign() {
-        return _getData("https://mqqapi.reader.qq.com/mqq/red_packet/user/clock_in/page");
+        var res = _getData("https://mqqapi.reader.qq.com/mqq/red_packet/user/clock_in");
+        _sleep(15);
+        return res;
     }
 
     /**
@@ -414,7 +428,7 @@ public class QqReadTask {
      */
     private Optional<JSONObject> _watchDailySignAds() {
         var res = _getData("https://mqqapi.reader.qq.com/mqq/red_packet/user/clock_in_video");
-        _sleep(3);
+        _sleep(15);
         return res;
     }
 
@@ -612,6 +626,24 @@ public class QqReadTask {
             args = new Object[]{this.qqReadConfig.getQq()};
         }
         return args;
+    }
+
+    /**
+     * 从今日任务列表寻找任务
+     *
+     * @param name 任务名称
+     * @return 任务
+     */
+    private Optional<JSONObject> _findByTaskName(String name, JSONArray taskList) {
+        return taskList
+                .stream()
+                .filter(it -> {
+                    var obj = (JSONObject) it;
+                    var title = obj.getString("title");
+                    return title.contains(name);
+                })
+                .map(JSONObject.class::cast)
+                .findAny();
     }
 
     private static class JsonObjectDataFunc

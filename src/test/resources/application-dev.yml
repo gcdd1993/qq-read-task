@@ -1,15 +1,15 @@
 qqread:
   configs:
-    - qq: 208292527
-      ywsession: 0bccsq0x1mrzy2uvgny0i2fsdidgs5vr
-      cookie: 'ywguid=208292527;ywkey=ywyVu2PgEp9e;platform=android;channel=mqqmina;mpVersion=0.41.0;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=208292527'
-      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=26572786&readTime=5232&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A5232%2C%22pay_status%22%3A0%7D%7D%5D&sp=-1
-      maxDailyReadTime: 648
-      openid: 208292527
-      guid: 208292527
-      session: 0bccsq0x1mrzy2uvgny0i2fsdidgs5vr
-      scene: 2014
-      source: wza0001wzb0002
+#    - qq: 208292527
+#      ywsession: 0bccsq0x1mrzy2uvgny0i2fsdidgs5vr
+#      cookie: 'ywguid=208292527;ywkey=ywyVu2PgEp9e;platform=android;channel=mqqmina;mpVersion=0.41.0;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=208292527'
+#      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=26572786&readTime=5232&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A5232%2C%22pay_status%22%3A0%7D%7D%5D&sp=-1
+#      maxDailyReadTime: 648
+#      openid: 208292527
+#      guid: 208292527
+#      session: 0bccsq0x1mrzy2uvgny0i2fsdidgs5vr
+#      scene: 2014
+#      source: wza0001wzb0002
     - qq: 3215323796
       ywsession: 4r5tynmcz9iw2mr4spcczlad0xaqoueu
       cookie: 'ywguid=3215323796;ywkey=ywCVDxxcvIrS;platform=android;channel=mqqmina;mpVersion=0.41.0;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=3215323796'
@@ -20,43 +20,43 @@ qqread:
       session: 4r5tynmcz9iw2mr4spcczlad0xaqoueu
       scene: 2014
       source: wza0001wzb0002
-    - qq: 2068078190
-      ywsession: 35ht46whutcs4g5d0075db6gbhkvfy4g
-      cookie: 'ywguid=2068078190;ywkey=ywGKdC6r6WjQ;platform=android;channel=mqqmina;mpVersion=0.41.0;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=2068078190'
-      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=26572786&readTime=7236&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A7236%2C%22pay_status%22%3A0%7D%7D%5D&sp=-1
-      maxDailyReadTime: 604
-      openid: 2068078190
-      guid: 2068078190
-      session: 35ht46whutcs4g5d0075db6gbhkvfy4g
-      scene: 2014
-      source: wza0001wzb0002
-    - qq: 2580740483
-      ywsession: awrkwah7kuv14p8afgr9vh9omi8lcwl4
-      cookie: 'ywguid=2580740483;ywkey=ywk0EmH3qRNv;platform=android;channel=mqqmina;mpVersion=0.41.0;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=2580740483'
-      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=26572786&readTime=6259&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A6259%2C%22pay_status%22%3A0%7D%7D%5D&sp=-1
-      maxDailyReadTime: 666
-      openid: 2580740483
-      guid: 2580740483
-      session: awrkwah7kuv14p8afgr9vh9omi8lcwl4
-      scene: 2014
-      source: wza0001wzb0002
-    - qq: 1950651641
-      ywsession: nhwpriw6fphcdsjg8s80ngsgiiqn23q4
-      cookie: 'ywguid=1950651641;ywkey=yw9Ww8HDtemP;platform=android;channel=mqqmina;mpVersion=0.41.0;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=1950651641'
-      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=26572786&readTime=7635&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A7635%2C%22pay_status%22%3A0%2C%22is_tail%22%3A0%7D%7D%5D&sp=-1
-      maxDailyReadTime: 648
-      openid: 1950651641
-      guid: 1950651641
-      session: nhwpriw6fphcdsjg8s80ngsgiiqn23q4
-      scene: 2014
-      source: wza0001wzb0002
-    - qq: 3305336190
-      ywsession: r2rclolqrepum4ukyovftmbp3v14g70k
-      cookie: 'ywguid=3305336190;ywkey=ywLaacP2L6MW;platform=android;channel=mqqmina;mpVersion=0.41.0;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=3305336190'
-      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=26572786&readTime=4451&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A4451%2C%22pay_status%22%3A0%7D%7D%5D&sp=-1
-      maxDailyReadTime: 615
-      openid: 3305336190
-      guid: 3305336190
-      session: r2rclolqrepum4ukyovftmbp3v14g70k
-      scene: 2014
-      source: wza0001wzb0002
+#    - qq: 2068078190
+#      ywsession: 35ht46whutcs4g5d0075db6gbhkvfy4g
+#      cookie: 'ywguid=2068078190;ywkey=ywGKdC6r6WjQ;platform=android;channel=mqqmina;mpVersion=0.41.0;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=2068078190'
+#      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=26572786&readTime=7236&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A7236%2C%22pay_status%22%3A0%7D%7D%5D&sp=-1
+#      maxDailyReadTime: 604
+#      openid: 2068078190
+#      guid: 2068078190
+#      session: 35ht46whutcs4g5d0075db6gbhkvfy4g
+#      scene: 2014
+#      source: wza0001wzb0002
+#    - qq: 2580740483
+#      ywsession: awrkwah7kuv14p8afgr9vh9omi8lcwl4
+#      cookie: 'ywguid=2580740483;ywkey=ywk0EmH3qRNv;platform=android;channel=mqqmina;mpVersion=0.41.0;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=2580740483'
+#      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=26572786&readTime=6259&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A6259%2C%22pay_status%22%3A0%7D%7D%5D&sp=-1
+#      maxDailyReadTime: 666
+#      openid: 2580740483
+#      guid: 2580740483
+#      session: awrkwah7kuv14p8afgr9vh9omi8lcwl4
+#      scene: 2014
+#      source: wza0001wzb0002
+#    - qq: 1950651641
+#      ywsession: nhwpriw6fphcdsjg8s80ngsgiiqn23q4
+#      cookie: 'ywguid=1950651641;ywkey=yw9Ww8HDtemP;platform=android;channel=mqqmina;mpVersion=0.41.0;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=1950651641'
+#      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=26572786&readTime=7635&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A7635%2C%22pay_status%22%3A0%2C%22is_tail%22%3A0%7D%7D%5D&sp=-1
+#      maxDailyReadTime: 648
+#      openid: 1950651641
+#      guid: 1950651641
+#      session: nhwpriw6fphcdsjg8s80ngsgiiqn23q4
+#      scene: 2014
+#      source: wza0001wzb0002
+#    - qq: 3305336190
+#      ywsession: r2rclolqrepum4ukyovftmbp3v14g70k
+#      cookie: 'ywguid=3305336190;ywkey=ywLaacP2L6MW;platform=android;channel=mqqmina;mpVersion=0.41.0;qq_ver=8.3.9.2952;os_ver=Android 10;mpos_ver=1.16.0;platform=android;openid=3305336190'
+#      bookUrl: https://mqqapi.reader.qq.com/mqq/addReadTimeWithBid?scene=2014&refer=-1&bid=26572786&readTime=4451&read_type=0&conttype=1&read_status=0&chapter_info=%5B%7B%221%22%3A%7B%22readTime%22%3A4451%2C%22pay_status%22%3A0%7D%7D%5D&sp=-1
+#      maxDailyReadTime: 615
+#      openid: 3305336190
+#      guid: 3305336190
+#      session: r2rclolqrepum4ukyovftmbp3v14g70k
+#      scene: 2014
+#      source: wza0001wzb0002

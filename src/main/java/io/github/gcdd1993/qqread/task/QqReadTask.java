@@ -32,6 +32,9 @@ public class QqReadTask {
     private final Request.Builder requestBuilder;
     private final QqReadConfig qqReadConfig;
     private final JPush jPush;
+    private static final int WITHDRAW_1 = 10_000; // 1元
+    private static final int WITHDRAW_0_6 = 6_000; // 0.6元
+    private static final int WITHDRAW_10 = WITHDRAW_1 * 10; // 10元
 
     public QqReadTask(JPush jPush, QqReadConfig config) {
         this.jPush = jPush;
@@ -53,7 +56,7 @@ public class QqReadTask {
     }
 
     /**
-     * 每日任务，只需运行一次
+     * 每日任务，每天前一小时，每隔5分钟运行一次
      * <p>
      * 请先完成「立即阅读任务」后，解锁今日任务
      */
@@ -272,15 +275,15 @@ public class QqReadTask {
                     var amount = withdrawInfo.getJSONObject("user").getInteger("amount");
                     var configList = withdrawInfo.getJSONArray("configList");
                     // 0.6元提现
-                    if (configList.getJSONObject(0).getInteger("amount") == 6_000) {
-                        _withdrawToWallet(6_000);
+                    if (configList.getJSONObject(0).getInteger("amount") == WITHDRAW_0_6) {
+                        _withdrawToWallet(WITHDRAW_0_6);
                         _i("【托管提现】提现0.6元成功");
-                        amount -= 6_000;
+                        amount -= WITHDRAW_0_6;
                     }
                     // 满10就提现
-                    if (amount >= 100_000) {
+                    if (amount >= WITHDRAW_10) {
                         // 满10块钱了
-                        _withdrawToWallet(100_000);
+                        _withdrawToWallet(WITHDRAW_10);
                         _i("【托管提现】提现10元成功");
                     } else {
                         _i("【托管提现】余额{}不足，无法提现", amount);
@@ -535,11 +538,7 @@ public class QqReadTask {
     }
 
     private Optional<JSONObject> _postData(String url) {
-        var req = requestBuilder
-                .url(url)
-                .method("POST", RequestBody.Companion.create(new byte[0], null))
-                .build();
-        return _execute(req, new JsonObjectDataFunc());
+        return _postData(url, RequestBody.Companion.create(new byte[0], null));
     }
 
     private Optional<JSONObject> _postData(String url, RequestBody body) {

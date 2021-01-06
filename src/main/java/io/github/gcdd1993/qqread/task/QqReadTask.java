@@ -74,7 +74,7 @@ public class QqReadTask {
                                     _readNow()
                                             .ifPresent(readNowReward -> {
                                                 _i("【{}】获得{}金币", task.getString("title"), readNowReward.getInteger("amount"));
-                                                this.jPush.push(MessageFormat.format("账号[{0}]立即阅读完成", qqReadConfig.getQq()), readNowReward.toJSONString());
+//                                                this.jPush.push(MessageFormat.format("账号[{0}]立即阅读完成", qqReadConfig.getQq()), readNowReward.toJSONString());
                                             });
                                 } else {
                                     _w("【{}】今日已完成，请不要重复操作", task.getString("title"));
@@ -178,7 +178,7 @@ public class QqReadTask {
                         }
                     } else {
                         var tip = tasks.getJSONObject("treasureBox").getString("tipText");
-                        _i("【开启宝箱失败】未到开启宝箱时间，下一个宝箱{}", tip);
+                        _d("【开启宝箱失败】未到开启宝箱时间，下一个宝箱{}", tip);
                     }
                 });
     }
@@ -564,6 +564,8 @@ public class QqReadTask {
                     return Optional.ofNullable(dataFunc.apply(json));
                 } else {
                     _w("get data error, url --> {}, msg --> {}", request.url().toString(), json.getString("msg"));
+                    // 可知的异常处理
+                    _handleError(json.getString("msg"));
                     throw new QqReadCallException(MessageFormat.format(
                             "在解析数据时出现错误 code --> {0}, msg --> {1}, url --> {2}",
                             json.getInteger("code"),
@@ -659,6 +661,28 @@ public class QqReadTask {
         @Override
         public JSONArray apply(JSONObject jsonObject) {
             return jsonObject.getJSONArray("data");
+        }
+    }
+
+    private void _handleError(String msg) {
+        if (msg.contains("立即阅读任务")) {
+            // 立即阅读《xxxx》
+            _getDailyTasks()
+                    .flatMap(tasks -> _findByTaskName("立即阅读", tasks.getJSONArray("taskList")))
+                    .ifPresent(task -> {
+                        var enableFlag = task.getInteger("enableFlag");
+                        var doneFlag = task.getInteger("doneFlag");
+                        if (enableFlag == 1 && doneFlag == 0) {
+                            _readNow()
+                                    .ifPresent(readNowReward -> {
+                                        _i("【{}】获得{}金币", task.getString("title"), readNowReward.getInteger("amount"));
+//                                                this.jPush.push(MessageFormat.format("账号[{0}]立即阅读完成", qqReadConfig.getQq()), readNowReward.toJSONString());
+                                    });
+                        } else {
+                            _w("【{}】今日已完成，请不要重复操作", task.getString("title"));
+//                        this.jPush.push(MessageFormat.format("账号[{0}]立即阅读重复完成", qqReadConfig.getQq()), tasks.toJSONString());
+                        }
+                    });
         }
     }
 
